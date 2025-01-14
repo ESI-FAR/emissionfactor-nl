@@ -25,7 +25,7 @@ The project setup is documented in [project_setup.md](project_setup.md). Feel fr
 To install co2_emission from GitHub repository, do:
 
 ```console
-git clone git@github.com:ESI-FAR/co2_emission/co2_emission.git
+git clone git@github.com:ESI-FAR/co2_emission.git
 cd co2_emission
 python -m pip install .
 ```
