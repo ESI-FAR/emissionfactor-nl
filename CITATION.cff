@@ -1,0 +1,15 @@
+# YAML 1.2
+---
+cff-version: "1.2.0"
+title: "co2_emission"
+authors:
+  - family-names: Vroegh
+    given-names: Thijs
+    orcid: "https://orcid.org/0000-0000-0000-0000"
+date-released: 2025-01-14
+version: "0.1.0"
+repository-code: "https://github.com/ESI-FAR/co2_emission/co2_emission"
+keywords:
+  - "co2 emission"
+  - " forecasting"
+message: "If you use this software, please cite it using these metadata."
