@@ -3,8 +3,8 @@ from pathlib import Path
 
 from autogluon.timeseries import TimeSeriesPredictor
 
-from . import retrieve_ned
-from .train_model import gluonify
+from emissionfactor_nl import retrieve_ned
+from emissionfactor_nl.train_model import gluonify
 
 
 if __name__ == "__main__":
@@ -21,13 +21,13 @@ if __name__ == "__main__":
             "   docker run -e NED_API_KEY --volume /local/path/to/output/dir:/data"
         )
         raise NotADirectoryError(msg)
-    
+
     gluon_runup = gluonify(retrieve_ned.get_runup_data())
     gluon_forecast = gluonify(retrieve_ned.get_current_forecast())
 
     predictor = TimeSeriesPredictor.load(os.environ.get("MODEL_PATH"))
     prediction = predictor.predict(gluon_runup, gluon_forecast)
-    
+
     date = prediction.index[0][1].strftime("%Y-%m-%d")
 
     prediction.to_csv(output_path / f"prediction_{date}.csv")
