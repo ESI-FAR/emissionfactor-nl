@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 from autogluon.timeseries import TimeSeriesDataFrame, TimeSeriesPredictor
 
-from . import read_ned
+from emissionfactor_nl import read_ned
 
 
 def gluonify(df: pd.DataFrame) -> TimeSeriesDataFrame:
@@ -15,11 +15,11 @@ def gluonify(df: pd.DataFrame) -> TimeSeriesDataFrame:
 
 if __name__ == "__main__":
     # Load env vars
-    training_data_path = os.environ.get("training_data")
+    training_data_path = os.environ.get("TRAINING_DATA")
     if training_data_path is None:
         raise ValueError
 
-    model_path = os.environ.get("model_path")
+    model_path = os.environ.get("MODEL_PATH")
     if model_path is None:
         raise ValueError
 
@@ -41,5 +41,5 @@ if __name__ == "__main__":
         path=model_path
     ).fit(
         gluon_train_data,
-        excluded_model_types=["Chronos", "DeepAR", "TiDE"]
+        excluded_model_types=["Chronos", "DeepAR", "TiDE"],
     )

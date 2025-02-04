@@ -7,8 +7,8 @@ COPY ./data/NED training_data
 COPY ./src/emissionfactor-nl/train_model.py train_model.py
 COPY ./src/emissionfactor-nl/read_ned.py read_ned.py
 
-ENV training_data=training_data
-ENV model_path=model
+ENV TRAINING_DATA=training_data
+ENV MODEL_PATH=model
 
 RUN python train_model.py
 
@@ -16,7 +16,7 @@ RUN python train_model.py
 RUN rm training_data -rf
 
 # Make model data dir available for all users running docker non-root
-RUN chmod -R 777 ${model_path}
+RUN chmod -R 777 ${MODEL_PATH}
 # Make more required dirs accesible for non-root users
 RUN mkdir -m 777 mpl
 ENV MPLCONFIGDIR=mpl
@@ -25,6 +25,6 @@ ENV HF_HOME=hug_cache
 
 COPY ./src/emissionfactor-nl/retrieve_ned.py retrieve_ned.py
 COPY ./src/emissionfactor-nl/predict.py predict.py
-ENV output_path=/data
+ENV OUTPUT_PATH=/data
 
 CMD [ "python", "predict.py" ]

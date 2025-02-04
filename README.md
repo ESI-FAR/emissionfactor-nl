@@ -34,7 +34,7 @@ To run the container image do:
 
 ```docker
 docker run \
-    -e ned_api_key \
+    -e NED_API_KEY \
     --volume /local/path/to/output/dir:/data:/data \
     ghcr.io/bschilperoort/emissionfactor-forecast
 ```
@@ -43,9 +43,9 @@ The `/data` directory is the location where the prediction file should end up.
 The container will also write the run-up data used in the prediction, as well as
 NED's forecast for available wind and solar energy.
 
-The environmental variable `ned_api_key` should be your ned.nl API key. Set this with:
+The environmental variable `NED_API_KEY` should be your ned.nl API key. Set this with:
 ```sh
-export ned_api_key=enter-your-key-here
+export NED_API_KEY=enter-your-key-here
 ```
 More information on the NED API is available [here](https://ned.nl/nl/api).
 
@@ -53,7 +53,7 @@ Note that the container's ouput files will be written as root. To avoid this you
 can set the user ID, e.g.:
 ```docker
 docker run \
-    -e ned_api_key \
+    -e NED_API_KEY \
     --volume /local/path/to/output/dir:/data:/data \
     --user 1000:1000 \
     ghcr.io/bschilperoort/emissionfactor-forecast
@@ -68,6 +68,13 @@ from the container image due to licensing restrictions. The required files are;
  - years 2021, 2022, 2023, 2024
 
 These files are available from ned.nl after registering.
+
+## Installation
+
+```sh
+pip install autogluon.timeseries --extra-index-url https://download.pytorch.org/whl/cpu
+pip install -e .[dev]
+```
 
 ## ToDo:
 This is a work in progress, the repository will likely be reorganized and more
