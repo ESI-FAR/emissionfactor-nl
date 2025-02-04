@@ -4,17 +4,17 @@
 
 | fair-software.eu recommendations | |
 | :-- | :--  |
-| (1/5) code repository              | [![github repo badge](https://img.shields.io/badge/github-repo-000.svg?logo=github&labelColor=gray&color=blue)](https://github.com/ESI-FAR/co2_emission/co2_emission) |
-| (2/5) license                      | [![github license badge](https://img.shields.io/github/license/ESI-FAR/co2_emission/co2_emission)](https://github.com/ESI-FAR/co2_emission/co2_emission) |
-| (3/5) community registry           | [![RSD](https://img.shields.io/badge/rsd-co2_emission-00a3e3.svg)](https://www.research-software.nl/software/co2_emission) [![workflow pypi badge](https://img.shields.io/pypi/v/co2_emission.svg?colorB=blue)](https://pypi.python.org/project/co2_emission/) |
+| (1/5) code repository              | [![github repo badge](https://img.shields.io/badge/github-repo-000.svg?logo=github&labelColor=gray&color=blue)](https://github.com/ESI-FAR/emissionfactor-nl) |
+| (2/5) license                      | [![github license badge](https://img.shields.io/github/license/ESI-FAR/emissionfactor-nl)](https://github.com/ESI-FAR/emissionfactor-nl) |
+| (3/5) community registry           | [![RSD](https://img.shields.io/badge/rsd-emissionfactor-nl-00a3e3.svg)](https://www.research-software.nl/software/emissionfactor-nl) [![workflow pypi badge](https://img.shields.io/pypi/v/emissionfactor-nl.svg?colorB=blue)](https://pypi.python.org/project/emissionfactor-nl/) |
 | (4/5) citation                     | [![DOI](https://zenodo.org/badge/DOI/<replace-with-created-DOI>.svg)](https://doi.org/<replace-with-created-DOI>)|
 | (5/5) checklist                    | [![workflow cii badge](https://bestpractices.coreinfrastructure.org/projects/<replace-with-created-project-identifier>/badge)](https://bestpractices.coreinfrastructure.org/projects/<replace-with-created-project-identifier>) |
 | howfairis                          | [![fair-software badge](https://img.shields.io/badge/fair--software.eu-%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8F%20%20%E2%97%8B-yellow)](https://fair-software.eu) |
 | **Other best practices**           | &nbsp; |
-| Static analysis                    | [![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=ESI-FAR/co2_emission_co2_emission&metric=alert_status)](https://sonarcloud.io/dashboard?id=ESI-FAR/co2_emission_co2_emission) |
-| Coverage                           | [![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=ESI-FAR/co2_emission_co2_emission&metric=coverage)](https://sonarcloud.io/dashboard?id=ESI-FAR/co2_emission_co2_emission) || Documentation                      | [![Documentation Status](https://readthedocs.org/projects/co2_emission/badge/?version=latest)](https://co2_emission.readthedocs.io/en/latest/?badge=latest) || **GitHub Actions**                 | &nbsp; |
-| Build                              | [![build](https://github.com/ESI-FAR/co2_emission/co2_emission/actions/workflows/build.yml/badge.svg)](https://github.com/ESI-FAR/co2_emission/co2_emission/actions/workflows/build.yml) |
-| Citation data consistency          | [![cffconvert](https://github.com/ESI-FAR/co2_emission/co2_emission/actions/workflows/cffconvert.yml/badge.svg)](https://github.com/ESI-FAR/co2_emission/co2_emission/actions/workflows/cffconvert.yml) || SonarCloud                         | [![sonarcloud](https://github.com/ESI-FAR/co2_emission/co2_emission/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/ESI-FAR/co2_emission/co2_emission/actions/workflows/sonarcloud.yml) |## How to use co2_emission
+| Static analysis                    | [![workflow scq badge](https://sonarcloud.io/api/project_badges/measure?project=ESI-FAR/emissionfactor-nl_emissionfactor-nl&metric=alert_status)](https://sonarcloud.io/dashboard?id=ESI-FAR/emissionfactor-nl_emissionfactor-nl) |
+| Coverage                           | [![workflow scc badge](https://sonarcloud.io/api/project_badges/measure?project=ESI-FAR/emissionfactor-nl_emissionfactor-nl&metric=coverage)](https://sonarcloud.io/dashboard?id=ESI-FAR/emissionfactor-nl_emissionfactor-nl) || Documentation                      | [![Documentation Status](https://readthedocs.org/projects/emissionfactor-nl/badge/?version=latest)](https://emissionfactor-nl.readthedocs.io/en/latest/?badge=latest) || **GitHub Actions**                 | &nbsp; |
+| Build                              | [![build](https://github.com/ESI-FAR/emissionfactor-nl/actions/workflows/build.yml/badge.svg)](https://github.com/ESI-FAR/emissionfactor-nl/actions/workflows/build.yml) |
+| Citation data consistency          | [![cffconvert](https://github.com/ESI-FAR/emissionfactor-nl/actions/workflows/cffconvert.yml/badge.svg)](https://github.com/ESI-FAR/emissionfactor-nl/actions/workflows/cffconvert.yml) || SonarCloud                         | [![sonarcloud](https://github.com/ESI-FAR/emissionfactor-nl/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/ESI-FAR/emissionfactor-nl/actions/workflows/sonarcloud.yml) |## How to use emissionfactor-nl
 
 forecasting co2 emission in the netherlands 
 
@@ -22,11 +22,11 @@ The project setup is documented in [project_setup.md](project_setup.md). Feel fr
 
 ## Installation
 
-To install co2_emission from GitHub repository, do:
+To install emissionfactor-nl from GitHub repository, do:
 
 ```console
-git clone git@github.com:ESI-FAR/co2_emission.git
-cd co2_emission
+git clone git@github.com:ESI-FAR/emissionfactor-nl.git
+cd emissionfactor-nl
 python -m pip install .
 ```
 
@@ -36,7 +36,7 @@ Include a link to your project's full documentation here.
 
 ## Contributing
 
-If you want to contribute to the development of co2_emission,
+If you want to contribute to the development of emissionfactor-nl,
 have a look at the [contribution guidelines](CONTRIBUTING.md).
 
 ## Credits
