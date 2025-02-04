@@ -76,6 +76,7 @@ ignore = [
     "D104", # Missing public package docstring
     "D105", # Missing docstring in magic method
     "D107", # Missing docstring in `__init__`
+    "PD901",
 ]
 pydocstyle.convention = "google"
 
