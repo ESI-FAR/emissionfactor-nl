@@ -29,7 +29,7 @@ readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.10"
 version = "0.1.0"
 dependencies = [
-    "autogluon",
+    "autogluon.timeseries",
     "pandas",
     "matplotlib"
 ]
@@ -43,6 +43,14 @@ dev = [
 [project.urls]
 Repository = "https://github.com/ESI-FAR/emissionfactor-nl"
 Issues = "https://github.com/ESI-FAR/emissionfactor-nl/issues"
+
+[tool.hatch.build]
+exclude = [
+  "tests", "docs"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/emissionfactor-nl"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

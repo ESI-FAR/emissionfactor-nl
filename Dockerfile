@@ -1,6 +1,6 @@
 FROM python:3.11.11-bookworm@sha256:adb581d8ed80edd03efd4dcad66db115b9ce8de8522b01720b9f3e6146f0884c
 
-RUN pip install autogluon==1.2.0 --extra-index-url https://download.pytorch.org/whl/cpu
+RUN pip install autogluon.timeseries==1.2.0 --extra-index-url https://download.pytorch.org/whl/cpu
 
 RUN mkdir training_data
 COPY ./data/NED training_data
