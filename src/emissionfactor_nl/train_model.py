@@ -1,13 +1,13 @@
 import os
 from pathlib import Path
-
 import pandas as pd
-from autogluon.timeseries import TimeSeriesDataFrame, TimeSeriesPredictor
-
+from autogluon.timeseries import TimeSeriesDataFrame
+from autogluon.timeseries import TimeSeriesPredictor
 from emissionfactor_nl import read_ned
 
 
 def gluonify(df: pd.DataFrame) -> TimeSeriesDataFrame:
+    """Convert a pandas dataframe to the format expected by autogluon."""
     df = df.reset_index()
     df["item_id"] = 0
     return TimeSeriesDataFrame.from_data_frame(df, timestamp_column="time")
@@ -38,7 +38,7 @@ if __name__ == "__main__":
         freq="1h",
         target="emissionfactor",
         known_covariates_names=["volume_sun", "volume_land-wind", "volume_sea-wind"],
-        path=model_path
+        path=model_path,
     ).fit(
         gluon_train_data,
         excluded_model_types=["Chronos", "DeepAR", "TiDE"],

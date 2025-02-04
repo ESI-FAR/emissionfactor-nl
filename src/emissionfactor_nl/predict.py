@@ -1,11 +1,8 @@
 import os
 from pathlib import Path
-
 from autogluon.timeseries import TimeSeriesPredictor
-
 from emissionfactor_nl import retrieve_ned
 from emissionfactor_nl.train_model import gluonify
-
 
 if __name__ == "__main__":
     for env_var in ("NED_API_KEY", "MODEL_PATH", "OUTPUT_PATH"):

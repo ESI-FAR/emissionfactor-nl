@@ -63,7 +63,7 @@ def read_all(directory: Path) -> pd.DataFrame:
 
 
 def _read_ned(
-    files: Iterable[Path], which: Literal["mix", "sun", "land-wind", "sea-wind"]
+    files: Iterable[Path], which: Literal["mix", "sun", "land-wind", "sea-wind"],
 ) -> pd.DataFrame:
     data = []
     for file in sorted(files):
@@ -92,7 +92,7 @@ def _read_mix_file(fname: str | Path) -> pd.DataFrame:
 
 
 def _read_production_file(
-    fname: str | Path, which: Literal["sun", "land-wind", "sea-wind"]
+    fname: str | Path, which: Literal["sun", "land-wind", "sea-wind"],
 ) -> pd.DataFrame:
     df = pd.read_csv(
         fname,

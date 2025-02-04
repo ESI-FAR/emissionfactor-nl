@@ -58,9 +58,9 @@ def _request_data(
         "page": page,
     }
     response = requests.get(
-        URL, headers=HEADERS, params=params, allow_redirects=False, timeout=60
+        URL, headers=HEADERS, params=params, allow_redirects=False, timeout=60,
     )
-    if response.status_code != 200:
+    if response.status_code != 200:  # noqa: PLR2004
         msg = (
             f"Error retrieving data from api.ned.nl. Status code {response.status_code}"
         )
@@ -82,7 +82,7 @@ def _parse_response(
             dtime.append(pd.Timestamp(el["validfrom"]))
         df = pd.DataFrame(
             data={"total_volume": vol, "emissionfactor": ef},
-            index=dtime
+            index=dtime,
         )
     else:
         vol = []
@@ -98,7 +98,7 @@ def _parse_response(
 
 
 def _get_data(
-    sources: tuple[str], start_date: str, end_date: str, forecast: bool
+    sources: tuple[str], start_date: str, end_date: str, forecast: bool,
 ) -> pd.DataFrame:
     dfs = {source: [] for source in sources}
     for source in sources:
@@ -113,7 +113,7 @@ def _get_data(
 
         # Requests >200 items will have multiple pages. Retrieve and append these.
         last_page = _get_last_page(response)
-        if last_page >= 2:
+        if last_page >= 2:  # noqa: PLR2004
             for page in range(2, last_page + 1):
                 response = _request_data(
                     start_date,
@@ -135,7 +135,7 @@ def get_current_forecast() -> pd.DataFrame:
     Returns:
         DataFrame containing the forecasted solar, wind and offshore wind production.
     """
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(datetime.timezone.utc)
     start_forecast = now.strftime(DATE_FORMAT)
     end_forecast = (now + datetime.timedelta(days=7)).strftime(DATE_FORMAT)
 
@@ -150,7 +150,7 @@ def get_runup_data() -> pd.DataFrame:
         DataFrame containing the total produced energy, the grid emission factor,
             and the produced solar, wind and offshore wind energy.
     """
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(datetime.timezone.utc)
     start_runup = (now - datetime.timedelta(days=RUNUP_PERIOD)).strftime(DATE_FORMAT)
     end_runup = now.strftime(DATE_FORMAT)
 
