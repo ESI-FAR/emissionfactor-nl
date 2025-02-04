@@ -1,4 +1,5 @@
 """Functions for retrieving data (forecast & historical) through the NED API."""
+
 import datetime
 import json
 import os
@@ -30,7 +31,7 @@ HEADERS = {
 }
 
 DATE_FORMAT = "%Y-%m-%d"
-RUNUP_PERIOD = 4*7 # 4 weeks
+RUNUP_PERIOD = 4 * 7  # 4 weeks
 
 
 def _get_last_page(response: requests.Response) -> int:
@@ -58,7 +59,11 @@ def _request_data(
         "page": page,
     }
     response = requests.get(
-        URL, headers=HEADERS, params=params, allow_redirects=False, timeout=60,
+        URL,
+        headers=HEADERS,
+        params=params,
+        allow_redirects=False,
+        timeout=60,
     )
     if response.status_code != 200:  # noqa: PLR2004
         msg = (
@@ -69,7 +74,8 @@ def _request_data(
 
 
 def _parse_response(
-    response: requests.Response, which: Literal["mix", "sun", "land-wind", "sea-wind"],
+    response: requests.Response,
+    which: Literal["mix", "sun", "land-wind", "sea-wind"],
 ) -> pd.DataFrame:
     json_dict = json.loads(response.text)
     if which == "mix":
@@ -98,7 +104,10 @@ def _parse_response(
 
 
 def _get_data(
-    sources: tuple[str], start_date: str, end_date: str, forecast: bool,
+    sources: tuple[str],
+    start_date: str,
+    end_date: str,
+    forecast: bool,
 ) -> pd.DataFrame:
     dfs = {source: [] for source in sources}
     for source in sources:

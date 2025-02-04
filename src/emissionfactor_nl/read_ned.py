@@ -1,4 +1,5 @@
 """Functions for reading NED.nl data from their .csv files."""
+
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Literal
@@ -63,7 +64,8 @@ def read_all(directory: Path) -> pd.DataFrame:
 
 
 def _read_ned(
-    files: Iterable[Path], which: Literal["mix", "sun", "land-wind", "sea-wind"],
+    files: Iterable[Path],
+    which: Literal["mix", "sun", "land-wind", "sea-wind"],
 ) -> pd.DataFrame:
     data = []
     for file in sorted(files):
@@ -80,11 +82,13 @@ def _read_mix_file(fname: str | Path) -> pd.DataFrame:
         usecols=("validfrom (UTC)", "volume (kWh)", "emissionfactor (kg CO2/kWh)"),
     )
 
-    df = df.rename(columns={
-        "validfrom (UTC)": "time",
-        "volume (kWh)": "total_volume",
-        "emissionfactor (kg CO2/kWh)": "emissionfactor",
-    })
+    df = df.rename(
+        columns={
+            "validfrom (UTC)": "time",
+            "volume (kWh)": "total_volume",
+            "emissionfactor (kg CO2/kWh)": "emissionfactor",
+        }
+    )
     df["time"] = pd.to_datetime(df["time"])
     df = df.set_index("time")
     df["total_volume"] = df["total_volume"].astype(float)
@@ -92,17 +96,18 @@ def _read_mix_file(fname: str | Path) -> pd.DataFrame:
 
 
 def _read_production_file(
-    fname: str | Path, which: Literal["sun", "land-wind", "sea-wind"],
+    fname: str | Path,
+    which: Literal["sun", "land-wind", "sea-wind"],
 ) -> pd.DataFrame:
-    df = pd.read_csv(
-        fname,
-        usecols=("validfrom (UTC)", "volume (kWh)"))
+    df = pd.read_csv(fname, usecols=("validfrom (UTC)", "volume (kWh)"))
 
     name_vol = f"volume_{which}"
-    df = df.rename(columns={
-        "validfrom (UTC)": "time",
-        "volume (kWh)": name_vol,
-    })
+    df = df.rename(
+        columns={
+            "validfrom (UTC)": "time",
+            "volume (kWh)": name_vol,
+        }
+    )
     df["time"] = pd.to_datetime(df["time"])
     df = df.set_index("time")
     df[name_vol] = df[name_vol].astype(float)

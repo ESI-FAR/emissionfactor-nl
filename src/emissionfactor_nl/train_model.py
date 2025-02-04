@@ -13,6 +13,9 @@ def gluonify(df: pd.DataFrame) -> TimeSeriesDataFrame:
     return TimeSeriesDataFrame.from_data_frame(df, timestamp_column="time")
 
 
+PREDICTOR_LENGTH = 7 * 24
+
+
 if __name__ == "__main__":
     # Load env vars
     training_data_path = os.environ.get("TRAINING_DATA")
@@ -27,14 +30,14 @@ if __name__ == "__main__":
     ned_data = read_ned.read_all(Path(training_data_path))
     ned_data.index = ned_data.index.astype(str)
 
-    train_data = ned_data[:-7*24]
-    test_data = ned_data[-7*24:]
+    train_data = ned_data[:-PREDICTOR_LENGTH]
+    test_data = ned_data[-PREDICTOR_LENGTH:]
 
     gluon_train_data = gluonify(train_data)
     gluon_test_data = gluonify(test_data)
 
     predictor = TimeSeriesPredictor(
-        prediction_length=7*24,
+        prediction_length=PREDICTOR_LENGTH,
         freq="1h",
         target="emissionfactor",
         known_covariates_names=["volume_sun", "volume_land-wind", "volume_sea-wind"],
