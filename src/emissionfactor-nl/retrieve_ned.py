@@ -1,15 +1,16 @@
+"""Functions for retrieving data (forecast & historical) through the NED API."""
 import datetime
 import json
 import os
 from typing import Literal
-import pandas
+import pandas as pd
 import requests
 
 
-def get_key() -> str:
-    key = os.environ.get("ned_api_key")
+def _get_key() -> str:
+    key = os.environ.get("NED_API_KEY")
     if key is None:
-        msg = "`ned_api_key` not found in environment variables."
+        msg = "`NED_API_KEY` not found in environment variables."
         raise ValueError(msg)
     return key
 
@@ -24,7 +25,7 @@ TYPE_CODES = {
 URL = "https://api.ned.nl/v1/utilizations"
 
 HEADERS = {
-    "X-AUTH-TOKEN": get_key(),
+    "X-AUTH-TOKEN": _get_key(),
     "accept": "application/ld+json",
 }
 
@@ -32,19 +33,19 @@ DATE_FORMAT = "%Y-%m-%d"
 RUNUP_PERIOD = 4*7 # 4 weeks
 
 
-def get_last_page(response: requests.Response) -> int:
+def _get_last_page(response: requests.Response) -> int:
     """Retrieve the last page nr, as data can be split over multiple pages."""
     json_dict = json.loads(response.text)
-    return int(json_dict['hydra:view']['hydra:last'].split("&page=")[-1])
+    return int(json_dict["hydra:view"]["hydra:last"].split("&page=")[-1])
 
 
-def request_data(
+def _request_data(
     start_date: str,
     end_date: str,
     forecast: bool,
     which: Literal["mix", "sun", "sea-wind", "land-wind"],
     page: int = 1,
-):
+) -> requests.Response:
     params = {
         "point": 0,  # NL
         "type": TYPE_CODES[which],
@@ -56,87 +57,102 @@ def request_data(
         "validfrom[strictly_before]": end_date,  # up to (excluding)
         "page": page,
     }
-    response = requests.get(URL, headers=HEADERS, params=params, allow_redirects=False)
+    response = requests.get(
+        URL, headers=HEADERS, params=params, allow_redirects=False, timeout=60
+    )
     if response.status_code != 200:
-        msg = f"Error retrieving data from api.ned.nl. Status code {response.status_code}"
+        msg = (
+            f"Error retrieving data from api.ned.nl. Status code {response.status_code}"
+        )
         raise requests.ConnectionError(msg)
     return response
 
 
-def parse_response(
-    response: requests.Response, which: Literal["mix", "sun", "land-wind", "sea-wind"]
-):
+def _parse_response(
+    response: requests.Response, which: Literal["mix", "sun", "land-wind", "sea-wind"],
+) -> pd.DataFrame:
     json_dict = json.loads(response.text)
     if which == "mix":
-        vol = list()
-        ef = list()
-        dtime = list()
-        for el in json_dict['hydra:member']:
+        vol = []
+        ef = []
+        dtime = []
+        for el in json_dict["hydra:member"]:
             vol.append(float(el["volume"]))
             ef.append(el["emissionfactor"])
-            dtime.append(pandas.Timestamp(el["validfrom"]))
-        df = pandas.DataFrame(
+            dtime.append(pd.Timestamp(el["validfrom"]))
+        df = pd.DataFrame(
             data={"total_volume": vol, "emissionfactor": ef},
             index=dtime
         )
     else:
-        vol = list()
-        dtime = list()
-        for el in json_dict['hydra:member']:
+        vol = []
+        dtime = []
+        for el in json_dict["hydra:member"]:
             vol.append(float(el["volume"]))
-            dtime.append(pandas.Timestamp(el["validfrom"]))
-        df = pandas.DataFrame(data={f"volume_{which}": vol}, index=dtime)
+            dtime.append(pd.Timestamp(el["validfrom"]))
+        df = pd.DataFrame(data={f"volume_{which}": vol}, index=dtime)
 
     df.index = df.index.strftime("%Y-%m-%d %H:%M:%S")
     df.index.name = "time"
     return df
 
 
-def get_data(
+def _get_data(
     sources: tuple[str], start_date: str, end_date: str, forecast: bool
-) -> pandas.DataFrame:
+) -> pd.DataFrame:
     dfs = {source: [] for source in sources}
     for source in sources:
-        response = request_data(
+        response = _request_data(
             start_date,
             end_date,
             forecast=forecast,
             which=source,
             page=1,
         )
-        dfs[source].append(parse_response(response, source))
+        dfs[source].append(_parse_response(response, source))
 
         # Requests >200 items will have multiple pages. Retrieve and append these.
-        last_page = get_last_page(response)
-        if last_page >=2 :
+        last_page = _get_last_page(response)
+        if last_page >= 2:
             for page in range(2, last_page + 1):
-                response = request_data(
+                response = _request_data(
                     start_date,
                     end_date,
                     forecast=forecast,
                     which=source,
                     page=page,
                 )
-                dfs[source].append(parse_response(response, source))
-    return pandas.concat(
-        [pandas.concat(page, axis=0) for page in dfs.values()],
+                dfs[source].append(_parse_response(response, source))
+    return pd.concat(
+        [pd.concat(page, axis=0) for page in dfs.values()],
         axis=1,
     )
 
 
-def get_current_forecast() -> pandas.DataFrame:
+def get_current_forecast() -> pd.DataFrame:
+    """Get the most recent forecast from NED.nl.
+
+    Returns:
+        DataFrame containing the forecasted solar, wind and offshore wind production.
+    """
     now = datetime.datetime.now()
     start_forecast = now.strftime(DATE_FORMAT)
     end_forecast = (now + datetime.timedelta(days=7)).strftime(DATE_FORMAT)
 
     sources = ("sun", "land-wind", "sea-wind")
-    return get_data(sources, start_forecast, end_forecast, forecast=True)
+    return _get_data(sources, start_forecast, end_forecast, forecast=True)
 
 
-def get_runup_data() -> pandas.DataFrame:
+def get_runup_data() -> pd.DataFrame:
+    """Get the historical data from NED.nl, from four weeks ago up to today.
+
+    Returns:
+        DataFrame containing the total produced energy, the grid emission factor,
+            and the produced solar, wind and offshore wind energy.
+    """
     now = datetime.datetime.now()
     start_runup = (now - datetime.timedelta(days=RUNUP_PERIOD)).strftime(DATE_FORMAT)
     end_runup = now.strftime(DATE_FORMAT)
 
     sources = ("mix", "sun", "land-wind", "sea-wind")
-    return get_data(sources, start_runup, end_runup, forecast=False)
+    return _get_data(sources, start_runup, end_runup, forecast=False)
