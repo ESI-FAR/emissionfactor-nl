@@ -35,7 +35,7 @@ To run the container image do:
 ```docker
 docker run \
     -e NED_API_KEY \
-    --volume /local/path/to/output/dir:/data:/data \
+    --volume /local/path/to/output/dir:/data \
     ghcr.io/bschilperoort/emissionfactor-forecast
 ```
 
@@ -54,9 +54,9 @@ can set the user ID, e.g.:
 ```docker
 docker run \
     -e NED_API_KEY \
-    --volume /local/path/to/output/dir:/data:/data \
+    --volume /local/path/to/output/dir:/data \
     --user 1000:1000 \
-    ghcr.io/bschilperoort/emissionfactor-forecast
+    ghcr.io/esi-far/emissionfactor-forecast
 ```
 If your user ID is 1000.
 
@@ -69,13 +69,23 @@ from the container image due to licensing restrictions. The required files are;
 
 These files are available from ned.nl after registering.
 
-## Installation
+## Local installation, training and prediction
+
+Instead of the containerized model, you can also work in a local environment.
+
+- Download the data from NED.nl, see the previous section for which files you need
+- Clone this repository, change working directory into the repository 
+- In a Python environment (3.10/3.11) do:
 
 ```sh
 pip install autogluon.timeseries --extra-index-url https://download.pytorch.org/whl/cpu
 pip install -e .[dev]
 ```
 
-## ToDo:
-This is a work in progress, the repository will likely be reorganized and more
-descriptive documentation needs to be added.
+- Set the following environmental variables:
+  - `MODEL_PATH` should refer to a directory where the trained model should be stored
+  - `TRAINING_DATA` should refer to the directory with the training data .csv files
+  - `NED_API_KEY` should be your API key from NED.nl
+  - `OUTPUT_PATH` should be the path where you want the output .csv files to be written to
+- Now you can run `python src/emissionfactor_nl/train.py` to train the model
+- With `python src/emissionfactor_nl/predict.py` you can generate a forecast based on the currently available forecast data from NED.nl
