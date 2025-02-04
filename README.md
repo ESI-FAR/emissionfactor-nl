@@ -85,7 +85,7 @@ pip install -e .[dev]
 - Set the following environmental variables:
   - `MODEL_PATH` should refer to a directory where the trained model should be stored
   - `TRAINING_DATA` should refer to the directory with the training data .csv files
-  - `NED_API_KEY` should be your API key from NED.nl
+  - `NED_API_KEY` should be your API key from NED.nl (available after registration)
   - `OUTPUT_PATH` should be the path where you want the output .csv files to be written to
 - Now you can run `python src/emissionfactor_nl/train.py` to train the model
 - With `python src/emissionfactor_nl/predict.py` you can generate a forecast based on the currently available forecast data from NED.nl
