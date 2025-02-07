@@ -36,7 +36,7 @@ To run the container image do:
 docker run \
     -e NED_API_KEY \
     --volume /local/path/to/output/dir:/data \
-    ghcr.io/bschilperoort/emissionfactor-forecast
+    ghcr.io/esi-far/emissionfactor-forecast:0.1.0
 ```
 
 The `/data` directory is the location where the prediction file should end up.
@@ -56,7 +56,7 @@ docker run \
     -e NED_API_KEY \
     --volume /local/path/to/output/dir:/data \
     --user 1000:1000 \
-    ghcr.io/esi-far/emissionfactor-forecast
+    ghcr.io/esi-far/emissionfactor-forecast:0.1.0
 ```
 If your user ID is 1000.
 
