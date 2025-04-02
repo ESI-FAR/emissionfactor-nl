@@ -6,6 +6,15 @@ Formatted as described on [https://keepachangelog.com](https://keepachangelog.co
 
 ## Unreleased
 
+## [0.2.0] (2025-04-02)
+
+**Added:**
+
+- Air temperature data is used for an improved model.
+  - Historic data can be retrieved from the KNMI
+  - Forecasts are retrieved via the OpenMeteo API
+
+
 ## [0.1.0] (2025-02-04)
 
 With this workflow you can make forecasts of the emission factor (kgCO2eq/kWh)

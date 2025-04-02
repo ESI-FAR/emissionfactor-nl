@@ -10,7 +10,6 @@ authors:
     given-names: Thijs
     orcid: "https://orcid.org/0000-0002-6311-0798"
 date-released: 2025-01-14
-version: "0.1.0"
 repository-code: "https://github.com/ESI-FAR/emissionfactor-nl"
 keywords:
   - "co2 emission"
