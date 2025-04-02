@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-import numpy as np
 import pandas as pd
 from autogluon.timeseries import TimeSeriesDataFrame
 from autogluon.timeseries import TimeSeriesPredictor

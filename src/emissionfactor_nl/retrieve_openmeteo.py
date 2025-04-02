@@ -6,7 +6,7 @@ from retry_requests import retry
 
 OPENMETEO_URL = "https://api.open-meteo.com/v1/forecast"
 LOCATION = {
-    "latitude": 52.15, # Amersfoort (center of NL)
+    "latitude": 52.15,  # Amersfoort (center of NL)
     "longitude": 5.39,
 }
 
@@ -39,14 +39,16 @@ def retrieve_temperature() -> pd.DataFrame:
     hourly = response.Hourly()
     hourly_temperature_2m = hourly.Variables(0).ValuesAsNumpy()
 
-    hourly_data = {"date": pd.date_range(
-        start = pd.to_datetime(hourly.Time(), unit = "s", utc = True),
-        end = pd.to_datetime(hourly.TimeEnd(), unit = "s", utc = True),
-        freq = pd.Timedelta(seconds = hourly.Interval()),
-        inclusive = "left"
-    )}
+    hourly_data = {
+        "date": pd.date_range(
+            start=pd.to_datetime(hourly.Time(), unit="s", utc=True),
+            end=pd.to_datetime(hourly.TimeEnd(), unit="s", utc=True),
+            freq=pd.Timedelta(seconds=hourly.Interval()),
+            inclusive="left",
+        )
+    }
 
     hourly_data["air_temperature"] = hourly_temperature_2m
-    df_hourly = pd.DataFrame(data = hourly_data)
+    df_hourly = pd.DataFrame(data=hourly_data)
     df_hourly["date"] = pd.DatetimeIndex(df_hourly["date"]).tz_localize(None)
     return df_hourly.set_index("date")
