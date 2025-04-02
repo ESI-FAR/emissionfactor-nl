@@ -10,10 +10,10 @@ Formatted as described on [https://keepachangelog.com](https://keepachangelog.co
 
 **Added:**
 
-- Air temperature data is used for an improved model.
+- Air temperature data is used for an improved model
   - Historic data can be retrieved from the KNMI
   - Forecasts are retrieved via the OpenMeteo API
-
+- Total green production is used as input to the model, instead of separate components
 
 ## [0.1.0] (2025-02-04)
 
