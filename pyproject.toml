@@ -31,7 +31,10 @@ version = "0.1.0"
 dependencies = [
     "autogluon.timeseries",
     "pandas",
-    "matplotlib"
+    "matplotlib",
+    "openmeteo-requests",
+    "requests-cache",
+    "retry-requests"
 ]
 
 [project.optional-dependencies]

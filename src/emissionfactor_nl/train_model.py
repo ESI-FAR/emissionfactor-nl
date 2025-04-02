@@ -1,9 +1,11 @@
 import os
 from pathlib import Path
+import numpy as np
 import pandas as pd
 from autogluon.timeseries import TimeSeriesDataFrame
 from autogluon.timeseries import TimeSeriesPredictor
 from emissionfactor_nl import read_ned
+from emissionfactor_nl.read_knmi import parse_knmi_uurgeg
 
 
 def gluonify(df: pd.DataFrame) -> TimeSeriesDataFrame:
@@ -14,6 +16,7 @@ def gluonify(df: pd.DataFrame) -> TimeSeriesDataFrame:
 
 
 PREDICTOR_LENGTH = 7 * 24
+FRIDAY = 4
 
 
 if __name__ == "__main__":
@@ -30,8 +33,20 @@ if __name__ == "__main__":
     ned_data = read_ned.read_all(Path(training_data_path))
     ned_data.index = ned_data.index.astype(str)
 
-    train_data = ned_data[:-PREDICTOR_LENGTH]
-    test_data = ned_data[-PREDICTOR_LENGTH:]
+    knmi_weather_file = Path(training_data_path) / "uurgeg_260_2021-2030.txt"
+    df_knmi = parse_knmi_uurgeg(knmi_weather_file)
+
+    # Combine data sources
+    data = ned_data.join(df_knmi)
+
+    data["datetime"] = pd.DatetimeIndex(data.index)
+    data["weekend"] = data["datetime"].dt.day_of_week > FRIDAY
+    data["volume_wind"] = data["volume_land-wind"] + data["volume_sea-wind"]
+    data["volume_green"] = data["volume_sun"] + data["volume_wind"]
+
+    # Strip out test data
+    train_data = data[:-PREDICTOR_LENGTH]
+    test_data = data[-PREDICTOR_LENGTH:]
 
     gluon_train_data = gluonify(train_data)
     gluon_test_data = gluonify(test_data)
@@ -40,7 +55,7 @@ if __name__ == "__main__":
         prediction_length=PREDICTOR_LENGTH,
         freq="1h",
         target="emissionfactor",
-        known_covariates_names=["volume_sun", "volume_land-wind", "volume_sea-wind"],
+        known_covariates_names=["volume_green", "weekend", "air_temperature"],
         path=model_path,
     ).fit(
         gluon_train_data,
