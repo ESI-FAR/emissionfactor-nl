@@ -22,6 +22,9 @@ These are used in forecasting of the emission factor.
 
 *Example forecast, for 2025-01-28 - 2025-02-04*
 
+To produce a better forecast, the model also makes use of forecasted air temperature
+data.
+
 ## Reproducing results
 
 The Dockerfile contained in this reposity describes all steps you need to go
@@ -36,7 +39,7 @@ To run the container image do:
 docker run \
     -e NED_API_KEY \
     --volume /local/path/to/output/dir:/data \
-    ghcr.io/esi-far/emissionfactor-forecast:0.1.0
+    ghcr.io/esi-far/emissionfactor-forecast:0.2.0
 ```
 
 The `/data` directory is the location where the prediction file should end up.
@@ -49,6 +52,12 @@ export NED_API_KEY=enter-your-key-here
 ```
 More information on the NED API is available [here](https://ned.nl/nl/api).
 
+> [!IMPORTANT]
+> If you want to use the forecast for commercial use, you will have get a commercial
+> license and API key from [OpenMeteo](https://open-meteo.com/). To pass this API key,
+> set the `OPENMETEO_API_KEY` environment variable, and pass it to the container
+> in the same way as the NED API key.
+
 Note that the container's ouput files will be written as root. To avoid this you
 can set the user ID, e.g.:
 ```docker
@@ -56,18 +65,21 @@ docker run \
     -e NED_API_KEY \
     --volume /local/path/to/output/dir:/data \
     --user 1000:1000 \
-    ghcr.io/esi-far/emissionfactor-forecast:0.1.0
+    ghcr.io/esi-far/emissionfactor-forecast:0.2.0
 ```
 If your user ID is 1000.
 
 ## Building the container image
 
-Note that for model training, historical NED data is required, but this is removed
+Note that for model training, historical NED and KNMI data is required, but this is removed
 from the container image due to licensing restrictions. The required files are;
- - wind, zeewind, zon, electriciteitsmix .csv files
- - years 2021, 2022, 2023, 2024
+- NED.nl:
+  - wind, zeewind, zon, electriciteitsmix .csv files
+  - years 2021, 2022, 2023, 2024
+- KNMI:
+  - [Historical weather data from De Bilt](https://cdn.knmi.nl/knmi/map/page/klimatologie/gegevens/uurgegevens/uurgeg_260_2021-2030.zip) (as .txt, i.e., `uurgeg_260_2021-2030.txt`)
 
-These files are available from ned.nl after registering.
+These NED.nl files are available after registering.
 
 ## Local installation, training and prediction
 
@@ -86,6 +98,7 @@ pip install -e .[dev]
   - `MODEL_PATH` should refer to a directory where the trained model should be stored
   - `TRAINING_DATA` should refer to the directory with the training data .csv files
   - `NED_API_KEY` should be your API key from NED.nl (available after registration)
+  - `OPENMETEO_API_KEY` should be your OpenMeteo API key (only for commercial use).
   - `OUTPUT_PATH` should be the path where you want the output .csv files to be written to
 - Now you can run `python src/emissionfactor_nl/train_model.py` to train the model
 - With `python src/emissionfactor_nl/predict.py` you can generate a forecast based on the currently available forecast data from NED.nl

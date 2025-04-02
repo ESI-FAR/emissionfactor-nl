@@ -14,11 +14,11 @@ COPY src repo/src
 COPY pyproject.toml repo/pyproject.toml
 COPY LICENSE repo/LICENSE
 COPY README.md repo/README.md
-RUN pip install -e repo/
+RUN pip install repo/
 
 # Copy training data from local directory into container
 RUN mkdir training_data
-COPY ./data/NED training_data
+COPY ./data/training_data training_data
 
 ENV TRAINING_DATA=training_data
 ENV MODEL_PATH=model
