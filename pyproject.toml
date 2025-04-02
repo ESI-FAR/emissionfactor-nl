@@ -27,7 +27,7 @@ license = {file = "LICENSE"}
 name = "emissionfactor-nl"
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.10"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
     "autogluon.timeseries",
     "pandas",
